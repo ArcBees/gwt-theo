@@ -1,35 +1,44 @@
-var fs = require('fs');
 var path = require('path');
 
 var runSequence = require('run-sequence');
 var rimraf = require('rimraf');
 
 var gulp = require('gulp');
-var autoprefixer = require('gulp-autoprefixer');
-var gutil = require('gulp-util');
-var sass = require('gulp-sass');
-var livereload = require('gulp-livereload');
+var rename = require('gulp-rename');
+var replace = require('gulp-replace');
 
-var theo = require('theo');
+var gwtTheo = require('gwt-theo');
 
 ////////////////////////////////////////////////////////////////////
 // Paths
 ////////////////////////////////////////////////////////////////////
 
 var paths = {
-  designProperties: './design-properties',
-  generated: './.generated',
-  output: './.www',
-  sass: './src/sass'
+  generated: './src/main/webapp/_theme-guide',
+  themeFiles: './theme-files',
+  themeProperties: './theme-properties',
+  java: './src/main/java/com/domain/www/client/resources/theme',
+  resources: './src/main/resources/com/domain/www/client/resources/theme'
 };
 
-function getPath(p) {
-  return path.resolve(__dirname, p);
+var gwt = {
+  name: 'theme',
+  pckg: 'com.domain.www.client.resources.theme'
 }
 
 ////////////////////////////////////////////////////////////////////
 // Helpers
 ////////////////////////////////////////////////////////////////////
+
+function getPath(p) {
+  return path.resolve(__dirname, p);
+}
+
+function getIcons() {
+  if (icons.type == "icomoon") {
+    return require(paths.themeFiles + '/' + icons.name + '/selection.json');
+  }
+}
 
 function clean(p) {
   return function(done) {
@@ -42,65 +51,92 @@ function clean(p) {
 // Tasks - Clean
 ////////////////////////////////////////////////////////////////////
 
-gulp.task('clean:generated', clean(paths.generated))
-gulp.task('clean:output', clean(paths.output))
-gulp.task('clean', ['clean:generated', 'clean:output']);
+gulp.task('clean', clean(paths.generated));
 
 ////////////////////////////////////////////////////////////////////
 // Tasks - Design Properties
 ////////////////////////////////////////////////////////////////////
 
-gulp.task('design-properties', ['styleguide'], function () {
-  return gulp.src('./design-properties/app.json')
-    .pipe(theo.plugins.transform('web'))
-    .pipe(theo.plugins.format('scss'))
+gulp.task('styleguide', function () {
+  // Styleguide with icons
+  if (typeof icons != "undefined") {
+    // Move icons files into styleguide
+    gulp.src(paths.themeFiles + '/icons/fonts/*')
+      .pipe(gulp.dest(paths.generated + "/fonts"));
+    // Move icons style into stylguide
+    gulp.src(paths.themeFiles + '/icons/style.css')
+      .pipe(rename('icons.css'))
+      .pipe(gulp.dest(paths.generated));
+    // Add styleguide style
+    gulp.src('./node_modules/gwt-theo/dist/props/formats/html.css')
+      .pipe(rename('style.css'))
+      .pipe(gulp.dest(paths.generated));
+    // Get the icons
+    iconsData = getIcons();
+  } 
+  // Styleguide without icons
+  else {
+    iconsData = [];
+  }
+  // Generate styleguide
+  return gulp.src(paths.themeProperties + '/theme.json')
+    .pipe(gwtTheo.plugins.transform('raw'))
+    .pipe(gwtTheo.plugins.format('html', iconsData))
+    .pipe(rename('index.html'))
     .pipe(gulp.dest(paths.generated));
 });
 
-gulp.task('styleguide', function () {
-  return gulp.src('./design-properties/app.json')
-    .pipe(theo.plugins.transform('web'))
-    .pipe(theo.plugins.format('html'))
-    .pipe(gulp.dest(paths.generated))
-    .pipe(livereload());
+////////////////////////////////////////////////////////////////////
+// Tasks - GWT
+////////////////////////////////////////////////////////////////////
+
+gulp.task('gwt', function(done) {
+  runSequence(['gss', 'java']);
+});
+
+gulp.task('gss', function () {
+  // Generate theme.gss
+  return gulp.src(paths.themeProperties + '/theme.json')
+    .pipe(gwtTheo.plugins.transform('raw'))
+    .pipe(gwtTheo.plugins.format('gss', gwt))
+    .pipe(gulp.dest(paths.resources));
+});
+
+gulp.task('java', function () {
+  // Generate java files
+  return gulp.src([paths.themeProperties + '/*.json', '!' + paths.themeProperties + '/theme.json'])
+    .pipe(gwtTheo.plugins.transform('raw'))
+    .pipe(gwtTheo.plugins.format('java', gwt))
+    .pipe(gulp.dest(paths.java));
 });
 
 ////////////////////////////////////////////////////////////////////
-// Tasks - Site
+// Tasks - Icons
 ////////////////////////////////////////////////////////////////////
 
-gulp.task('styles', ['design-properties'], function () {
-  return gulp.src(getPath('src/styles/**/*.scss'))
-    .pipe(sass())
-    .pipe(autoprefixer())
-    .pipe(gulp.dest(paths.output))
-    .pipe(livereload());
-});
-
-gulp.task('html', function () {
-  return gulp.src(getPath('src/index.html'))
-    .pipe(gulp.dest(paths.output))
-    .pipe(livereload());
+gulp.task('icons', function (done) {
+  if (typeof icons != "undefined") {
+    // Generate stylesheet
+    gulp.src(paths.themeFiles + '/icons/style.css')
+      .pipe(rename('icons.gss'))
+      .pipe(replace(/@font-face[\s\S]*?}/gm, icons.header))
+      .pipe(replace('[class*=" icon_"]', '[class*="icon_"]'))
+      .pipe(gulp.dest(icons.path));
+    // Move icons into resources
+    gulp.src(paths.themeFiles + '/icons/fonts/*')
+      .pipe(gulp.dest(icons.path));
+    // Generate resources file
+    return gulp.src(paths.themeFiles + '/icons/selection.json')
+      .pipe(gwtTheo.plugins.format('icons', gwt))
+      .pipe(rename('ThemeResources.java'))
+      .pipe(gulp.dest(paths.java));
+  }
 });
 
 ////////////////////////////////////////////////////////////////////
-// Tasks - Watch
+// Tasks - Default
 ////////////////////////////////////////////////////////////////////
-
-gulp.task('watch', function () {
-  livereload.listen({
-    port: 35729
-  });
-  gulp.watch(getPath('design-properties/**/*.json'), ['styles']);
-  gulp.watch(getPath('src/**/*.scss'), ['styles']);
-  gulp.watch(getPath('src/**/*.html'), ['html']);
-});
-
-gulp.task('dev', ['default'], function() {
-  require('./server');
-  gulp.start('watch');
-});
 
 gulp.task('default', function(done) {
-  runSequence('clean', ['styleguide', 'styles', 'html'], done);
+  runSequence(['icons','styleguide', 'gwt'], done);
 });

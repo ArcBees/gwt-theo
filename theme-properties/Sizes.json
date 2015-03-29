@@ -1,0 +1,14 @@
+{
+  "global": {
+    "type": "size",
+    "category": "size",
+    "classname": "Sizes",
+    "title": ""
+  },
+  "props": {
+    "S_LINEHEIGHT": {
+      "value": "1.4",
+      "comment": "Default line-height"
+    }
+  }
+}

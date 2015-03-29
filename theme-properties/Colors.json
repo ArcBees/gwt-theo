@@ -1,0 +1,29 @@
+{
+  "global": {
+    "type": "color",
+    "category": "color",
+    "classname": "Colors",
+    "title": ""
+  },
+  "props": {
+    "title-app": {
+      "value": "App colors"
+    },
+    "C_PRIMARY": {
+      "value": "#3c5bb3"
+    },
+    "C_SECONDARY": {
+      "value": "rgba(255, 255, 255, 0.4)"
+    },
+    
+    "title-default": {
+      "value": "Default colors"
+    },
+    "C_BACKGROUND": {
+      "value": "#fff"
+    },
+    "C_TEXT": {
+      "value": "#bdbdbd"
+    }
+  }
+}

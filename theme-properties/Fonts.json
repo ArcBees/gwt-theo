@@ -1,0 +1,18 @@
+{
+  "global": {
+    "type": "size",
+    "category": "font",
+    "classname": "Fonts",
+    "title": ""
+  },
+  "props": {
+    "F_PRIMARY": {
+      "value": "Arial, sans-serif",
+      "comment": "Arial, regular"
+    },
+    "F_PRIMARY_BOLD": {
+      "value": "Arial, sans-serif; font-weight: 700",
+      "comment": "Arial, bold"
+    }
+  }
+}

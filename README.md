@@ -1,25 +1,51 @@
-# Theo Example
+# GWT Theo
 
-Example project for integrating Design Properties using [theo](https://github.com/salesforce-ux/theo).
+Using [theo](https://github.com/salesforce-ux/theo) with GWT.
 
 ## Setup
 
-```bash
-$ git clone https://github.com/salesforce-ux/theo-example.git
-$ cd theo-example
-$ npm install
-```
+In `gulpfile.js`, change paths to match your project
 
-## Development
+To build source files and create the style guide, run `gulp`
 
-While developing your website or Design Properties use `npm run dev` 
-and then open [localhost:3000]().
+_You will need [npm](https://www.npmjs.com/) and [Gulp](http://gulpjs.com/)_
 
-Now you can start editing your `src/index.html` and `src/sass/main.scss`.
+## Working with icons
 
-To see the generated docs for your design-properties go to [localhost:3000/generated/app.html]().
-Note: You can change your design-properties in `./design-properties/app.json` or
-the `./design-properties/aliases.json` and see live changes to the docs.
+Right now, only icons generated from [icomoon](https://icomoon.io/) are supported.
 
-Further if you open [localhost:3000]() and change the design-properties,
-the updates are reflected live.
+Before exporting your icons from icomoon, you should go into the Preferences panel once in the Generate Font tab, and rename the font name for `icons` and the class prefix for `icon_`.
+
+Into `theme-files/icons`, add the `style.css`, `selection.json` and the whole `/fonts` folder from the icomoon export.
+
+Run `gulp` to generate everything.
+
+## Available tasks
+
+### Style guide
+
+- `gulp styleguide` Build only the styleguide
+
+### GWT files
+
+- `gulp gss` Build the _theme.gss_ file
+- `gulp java` Build java files for each properties file
+- `gulp gwt` Run `gulp gss` and `gulp java`
+
+### Icons
+
+- `gulp icons` Build the resource and style files, move icons into resources
+
+## License
+
+GWT Theo is an adaptation of [Theo](https://github.com/salesforce-ux/theo), based on the following license:
+
+--
+
+Copyright (c) 2015, salesforce.com, inc. All rights reserved.
+
+Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+
+Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution. Neither the name of salesforce.com, inc. nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
