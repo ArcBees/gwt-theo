@@ -14,11 +14,11 @@ var gwtTheo = require('gwt-theo');
 ////////////////////////////////////////////////////////////////////
 
 var paths = {
-  generated: './src/main/webapp/_theme-guide',
+  generated: './../src/main/webapp/_theme-guide',
   themeFiles: './theme-files',
   themeProperties: './theme-properties',
-  java: './src/main/java/com/domain/www/client/resources/theme',
-  resources: './src/main/resources/com/domain/www/client/resources/theme'
+  java: './../src/main/java/com/domain/www/client/resources/theme',
+  resources: './../src/main/resources/com/domain/www/client/resources/theme'
 };
 
 var gwt = {
@@ -67,10 +67,6 @@ gulp.task('styleguide', function () {
     gulp.src(paths.themeFiles + '/icons/style.css')
       .pipe(rename('icons.css'))
       .pipe(gulp.dest(paths.generated));
-    // Add styleguide style
-    gulp.src('./node_modules/gwt-theo/dist/props/formats/html.css')
-      .pipe(rename('style.css'))
-      .pipe(gulp.dest(paths.generated));
     // Get the icons
     iconsData = getIcons();
   } 
@@ -78,6 +74,10 @@ gulp.task('styleguide', function () {
   else {
     iconsData = [];
   }
+  // Add styleguide style
+  gulp.src('./node_modules/gwt-theo/dist/props/formats/html.css')
+      .pipe(rename('style.css'))
+      .pipe(gulp.dest(paths.generated));
   // Generate styleguide
   return gulp.src(paths.themeProperties + '/theme.json')
     .pipe(gwtTheo.plugins.transform('raw'))
