@@ -17,13 +17,13 @@ var paths = {
   generated: './../src/main/webapp/_theme-guide',
   themeFiles: './theme-files',
   themeProperties: './theme-properties',
-  java: './../src/main/java/com/domain/www/client/resources/theme',
-  resources: './../src/main/resources/com/domain/www/client/resources/theme'
+  java: './../src/main/java/com/arcbees/frameworkcss/client/resources/theme',
+  resources: './../src/main/resources/com/arcbees/frameworkcss/client/resources/theme'
 };
 
 var gwt = {
   name: 'theme',
-  pckg: 'com.domain.www.client.resources.theme'
+  pckg: 'com.arcbees.frameworkcss.client.resources.theme'
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -46,7 +46,6 @@ function clean(p) {
     done();
   }
 }
-
 ////////////////////////////////////////////////////////////////////
 // Tasks - Clean
 ////////////////////////////////////////////////////////////////////

@@ -10,20 +10,59 @@
       "value": "App colors"
     },
     "C_PRIMARY": {
-      "value": "#3c5bb3"
+      "value": "#2da2bb"
     },
     "C_SECONDARY": {
-      "value": "rgba(255, 255, 255, 0.4)"
+      "value": "#fbe983"
     },
-    
-    "title-default": {
-      "value": "Default colors"
+
+
+    "title-background": {
+      "value": "Background colors"
+    },
+    "C_BACKGROUND_LIGHT": {
+      "value": "#ffffff"
     },
     "C_BACKGROUND": {
-      "value": "#fff"
+      "value": "#eee"
+    },
+    "C_BACKGROUND_DARK": {
+      "value": "#999"
+    },
+
+    "title-text": {
+      "value": "Text colors"
     },
     "C_TEXT": {
-      "value": "#bdbdbd"
+      "value": "#333333"
+    },
+    "C_TEXT_LIGHT": {
+      "value": "#ffffff"
+    },
+    "C_TEXT_MEDIUM": {
+      "value": "#eee"
+    },
+    "C_TEXT_DISABLED": {
+      "value": "#ddd"
+    },
+    "C_TEXT_ERROR": {
+      "value": "#ff0000"
+    },
+
+    "title-state": {
+      "value": "State colors"
+    },
+    "C_ACTION": {
+      "value": "#116188"
+    },
+    "C_DISABLED": {
+      "value": "#eee"
+    },
+    "C_POSITIVE": {
+      "value": "#80c18d"
+    },
+    "C_NEGATIVE": {
+      "value": "#ffcccc"
     }
   }
 }
